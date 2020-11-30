@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "1018493948173",
+    "firebase_url": "https://inventarioconstructora.firebaseio.com",
+    "project_id": "inventarioconstructora",
+    "storage_bucket": "inventarioconstructora.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1018493948173:android:23964735c25e60b0df6044",
+        "android_client_info": {
+          "package_name": "com.amuyu.groutingbolivia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1018493948173-7hso6icsp5a93dv5jtn3nasr4br2vaf5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWDaNTOT1f0Yet26VhTerugWgCm132tk8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1018493948173-7hso6icsp5a93dv5jtn3nasr4br2vaf5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1018493948173:android:06664566d1ca165ddf6044",
+        "android_client_info": {
+          "package_name": "com.amuyu.movil_inv"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1018493948173-7hso6icsp5a93dv5jtn3nasr4br2vaf5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWDaNTOT1f0Yet26VhTerugWgCm132tk8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1018493948173-7hso6icsp5a93dv5jtn3nasr4br2vaf5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

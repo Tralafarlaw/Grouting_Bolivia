@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    tools:context=".ui.clients.RegisterClientFragment">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nuevo Cliente"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+    <EditText
+        android:id="@+id/new_client_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="Nombre"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/new_client_nit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="CI/NIT"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/new_client_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="Telefono"
+        android:inputType="phone" />
+
+    <EditText
+        android:id="@+id/new_client_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="Dirección"
+        android:inputType="textMultiLine"
+        android:lines="2" />
+
+    <RadioGroup
+        android:id="@+id/new_client_checks"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RadioButton
+            android:id="@+id/el_alto_check"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="El Alto" />
+
+        <RadioButton
+            android:id="@+id/centro_check"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="La Paz Zona Centro" />
+
+        <RadioButton
+            android:id="@+id/zona_sur_check"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="La Paz Zona Sur" />
+
+        <RadioButton
+            android:id="@+id/oruro_check"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Oruro" />
+
+        <RadioButton
+            android:id="@+id/others_check"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Otros" />
+
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/new_client_cancel"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_weight="1"
+            android:text="Cancelar" />
+
+        <Button
+            android:id="@+id/new_client_agree"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_weight="1"
+            android:text="Aceptar" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cart_navigation"
+    app:startDestination="@id/cartFragment">
+
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.amuyu.groutingbolivia.ui.cart.CartFragment"
+        android:label="fragment_cart"
+        tools:layout="@layout/fragment_cart" >
+        <action
+            android:id="@+id/action_cart_to_datos"
+            app:destination="@id/datosFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/confirmFragment"
+        android:name="com.amuyu.groutingbolivia.ui.cart.ConfirmFragment"
+        android:label="fragment_confirm"
+        tools:layout="@layout/fragment_confirm" >
+
+    </fragment>
+    <fragment
+        android:id="@+id/datosFragment"
+        android:name="com.amuyu.groutingbolivia.ui.cart.DatosFragment"
+        android:label="fragment_datos"
+        tools:layout="@layout/fragment_datos" >
+        <action
+            android:id="@+id/action_datos_to_confirm"
+            app:destination="@id/paymentFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right">
+
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="com.amuyu.groutingbolivia.ui.cart.PaymentFragment"
+        android:label="fragment_payment"
+        tools:layout="@layout/fragment_payment" >
+    <argument
+        android:name="cliente"
+        app:argType="com.amuyu.groutingbolivia.model.Cliente"
+        app:nullable="true"
+        android:defaultValue="@null" />
+    <argument
+        android:name="cliente_name"
+        app:argType="string"
+        app:nullable="true" />
+    <argument
+        android:name="dni"
+        app:argType="string"
+        app:nullable="true" />
+        <action
+            android:id="@+id/action_payment_to_confirm"
+            app:destination="@id/confirmFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+</navigation>
