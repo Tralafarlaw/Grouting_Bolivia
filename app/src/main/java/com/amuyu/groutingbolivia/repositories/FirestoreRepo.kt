@@ -145,6 +145,9 @@ class FirestoreRepo {
             }
            // mRealtimeRef.child("clientes").child(c.zona.toString()).addListenerForSingleValueEvent(postListener)*/
         }
+        fun updateCliente( c: Cliente, id: String){
+            mReference.collection(Const.Clientes).document(id).update(c.toMap() as Map<String, Any>)
+        }
         fun completeCredito(id: String, cant: Double){
             mReference.collection(Const.Creditos).document(id).update("saldo", cant)
             mReference.collection(Const.Creditos).document(id).update("historial", FieldValue.arrayUnion(Pagos(cantidad = cant)))

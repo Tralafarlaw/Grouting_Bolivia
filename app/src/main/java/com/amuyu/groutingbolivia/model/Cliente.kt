@@ -16,6 +16,12 @@ data class Cliente(
     override fun toString(): String {
         return nombre
     }
+    fun toMap() = hashMapOf(
+        "nombre" to nombre,
+        "direccion" to direccion,
+        "nit" to nit,
+        "telefono" to telefono
+    )
 }
 enum class ZONAS{
     ORURO, CENTRO, SUR, EL_ALTO,OTROS
