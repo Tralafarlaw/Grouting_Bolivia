@@ -70,8 +70,9 @@ dependencies {
     // Lifecycles only (without ViewModel or LiveData)
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     implementation 'com.github.guilhe:quantity-picker-view:1.2.4'
-    //Others
+    // others
     implementation 'com.afollestad.material-dialogs:core:3.3.0'
     implementation 'com.afollestad.material-dialogs:input:3.3.0'
+    implementation 'com.github.cazaea:sweet-alert-dialog:1.0.0'
     implementation 'com.itextpdf:itextg:5.5.10'
 }

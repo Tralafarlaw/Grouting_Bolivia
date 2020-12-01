@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_my_profile"
+        android:icon="@drawable/ic_baseline_account_box_24"
+        android:title="Mi Perfil" />
+    <item
+        android:id="@+id/menu_my_clients"
+        android:icon="@drawable/ic_baseline_supervised_user_circle_24"
+        android:title="Mis Clientes" />
+    <item
+        android:id="@+id/menu_about"
+        android:icon="@drawable/ic_baseline_info_24"
+        android:title="Acerca de " />
+    <item
+        android:id="@+id/menu_logout"
+        android:icon="@drawable/ic_baseline_exit_to_app_24"
+        android:title="Cerrar Sesion" />
+</menu>

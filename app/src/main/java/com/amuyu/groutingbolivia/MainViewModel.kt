@@ -3,6 +3,7 @@ package com.amuyu.groutingbolivia
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.amuyu.groutingbolivia.liveData.ProfileLiveData
 import com.amuyu.groutingbolivia.model.*
 import com.amuyu.movil_inv.repositories.FirestoreRepo
 
@@ -123,7 +124,7 @@ class MainViewModel: ViewModel() {
         }
         return Venta(numero = num, cliente = cl, items = aux)
     }
-
+    val profile by lazy { ProfileLiveData() }
     val text: LiveData<String> = _text
     val cartSize: LiveData<Int> = _cartSize
     val productos: LiveData<List<Producto>> by lazy { _productos }
