@@ -7,13 +7,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 28
     buildToolsVersion "30.0.0"
 
     defaultConfig {
         applicationId "com.amuyu.groutingbolivia"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
 
@@ -73,6 +73,7 @@ dependencies {
     // others
     implementation 'com.afollestad.material-dialogs:core:3.3.0'
     implementation 'com.afollestad.material-dialogs:input:3.3.0'
-    implementation 'com.github.cazaea:sweet-alert-dialog:1.0.0'
+    implementation 'com.github.andreseko:sweet-alert-dialog:1.0.6'
     implementation 'com.itextpdf:itextg:5.5.10'
+    implementation "com.pdfview:pdfview-android:1.0.0"
 }

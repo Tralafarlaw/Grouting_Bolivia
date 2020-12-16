@@ -61,31 +61,6 @@ class FirestoreRepo {
             }
         }
 
-        fun registerVenta (t: Venta){
-            mReference.collection(Const.RegistrosT).add(t).addOnSuccessListener {
-                Log.d(TAG, "Subido con exito")
-                t.items.forEach { itemVenta ->
-                    mRealtimeRef.child("al1").child(itemVenta.producto).runTransaction(object : Transaction.Handler{
-                        override fun doTransaction(currentData: MutableData): Transaction.Result {
-                            return Transaction.success(currentData.also { it.value = (it.value as Int) + itemVenta.cantidad })
-                        }
-
-                        override fun onComplete(
-                            error: DatabaseError?,
-                            committed: Boolean,
-                            currentData: DataSnapshot?,
-                        ) {
-                            Log.d(TAG, "Transaccion Completa")
-                        }
-
-                    })
-                }
-
-            }.addOnFailureListener {e ->
-                Log.e(TAG, "Error: " + e.localizedMessage, e)
-                e.printStackTrace()
-            }
-        }
         fun descontaralAlmacen(Cantidad: String, InventarioId: String) {
             mReference.collection(Const.Inventario).document(InventarioId).update("mCantidad", FieldValue.increment(-(Cantidad.toLong()))).addOnFailureListener { e ->
                 e.printStackTrace()

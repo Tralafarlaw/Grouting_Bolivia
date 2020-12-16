@@ -3,24 +3,19 @@ package com.amuyu.groutingbolivia.model
 import com.google.firebase.firestore.Exclude
 
 data class Producto(
-    val nombre:        String = "",
-    val precio:         String = "0",
-    val photourl:        String  = "",
+    val categorias: List<String> = listOf(),
     val codigo: String = "",
-    val descuento:       String = "0",
-    val descripcion:    String = "",
-    val codigodebarras:     String = "",
-    @Exclude
-    val categorias: List<String> = listOf("categoria A", "categoria B" ,"categoria C" ,"categoria D")
+    val codigodebarras: String = "",
+    val descripcion: String = "",
+    val descuentoFerreteria: Double = 0.0 ,
+    val descuentoObras: Double = 0.0,
+    val descuentoOficina: Double = 0.0,
+    val nombre: String = "",
+    val photourl: String = "",
+    val precioFerreteria: Double = 0.0,
+    val precioObras: Double = 0.0,
+    val precioOficina: Double  = 0.0
 ){
     @get:Exclude
     var mProductoID: String = ""
-    @get:Exclude
-    val mdescuento: Double by lazy {  if(descuento == "") 0.0 else descuento.toDouble()}
-    @get:Exclude
-    val mprecio: Double by lazy {if(precio == "") 0.0 else precio.toDouble()}
-
-    override fun toString(): String {
-        return "$nombre :::: $mprecio ::: $precio "
-    }
 }

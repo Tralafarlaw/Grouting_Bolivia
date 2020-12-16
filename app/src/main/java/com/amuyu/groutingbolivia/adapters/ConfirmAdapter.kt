@@ -37,7 +37,7 @@ class ConfirmAdapter(): RecyclerView.Adapter<ConfirmAdapter.ItemVH>() {
             Log.d("RRR", "$position ++++ $aux" )
             val format = "%.2f"
             holder.cant.text = "${aux.cantidad}"
-            holder.prod.text = aux.producto
+            holder.prod.text = aux.nombre
             holder.desc.text = format.format(aux.descuento)
             holder.total.text = format.format((aux.cantidad* aux.precio)-aux.descuento)
             holder.unit.text = format.format(aux.precio)

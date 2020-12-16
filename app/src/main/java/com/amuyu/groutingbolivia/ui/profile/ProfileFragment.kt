@@ -12,9 +12,9 @@ import com.amuyu.groutingbolivia.LoginActivity
 import com.amuyu.groutingbolivia.MainViewModel
 import com.amuyu.groutingbolivia.R
 import com.amuyu.groutingbolivia.model.Perfil
-import com.cazaea.sweetalert.SweetAlertDialog
+import com.amuyu.groutingbolivia.ui.profile.clientes.ManageClientsFragment
+import com.andreseko.SweetAlert.SweetAlertDialog
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 
 class ProfileFragment : Fragment() {
@@ -28,14 +28,14 @@ class ProfileFragment : Fragment() {
         val v = inflater.inflate(R.layout.fragment_profile, container, false)
         mViewModel.profile.observe(viewLifecycleOwner, Observer {
             v.profile_name.text = "Nombre: %s".format(it.nombre)
-            v.profile_almacen.text = when (it.al) {
+            v.profile_almacen.text = when (it.almacen) {
                 "al1" -> "Almacen El Alto"
                 "al2" -> "Almacen Sopocachi"
                 else -> "Almacen Zona Sur"
             }
             mPerfil = it
         })
-        profile_nav.setNavigationItemSelectedListener {
+        v.profile_nav.setNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.menu_about -> about()
                 R.id.menu_logout -> logout()
@@ -61,7 +61,9 @@ class ProfileFragment : Fragment() {
         }
     }
     private fun clients(){
-
+        ManageClientsFragment.newInstance().also {
+            it.show(childFragmentManager, "MANAGE CLIENTS")
+        }
     }
     private fun perfil(){
         SweetAlertDialog(requireContext())

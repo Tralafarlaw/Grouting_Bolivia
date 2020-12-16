@@ -46,7 +46,7 @@ class ManageClientsFragment : DialogFragment() {
         rv.adapter = mAdapter
         rv.setOnItemClickListener { adapterView, view, i, l ->
             val c = adapterView.getItemAtPosition(i) as Cliente
-            RegisterClientFragment.newInstance().show(childFragmentManager, TAG)
+            RegisterClientFragment.newInstance(c.id).show(childFragmentManager, TAG)
         }
         v.mc_search.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(p0: String?): Boolean {
@@ -58,7 +58,9 @@ class ManageClientsFragment : DialogFragment() {
                 return true
             }
         })
-
+        v.mc_nuevo.setOnClickListener {
+            RegisterClientFragment.newInstance().show(childFragmentManager, TAG)
+        }
 
         return v
     }
@@ -80,7 +82,7 @@ class ManageClientsFragment : DialogFragment() {
     companion object {
 
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance() =
             ManageClientsFragment().apply {
 
             }

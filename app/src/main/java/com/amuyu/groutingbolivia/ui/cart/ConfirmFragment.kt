@@ -66,14 +66,11 @@ class ConfirmFragment : Fragment() {
             val aux = arrayListOf<ItemVenta>()
             for (venta in mData.items) {
                 aux.add(ItemVenta(
-                    producto = try {
-                        it.filter { ss -> ss.mProductoID == venta.producto }[0].nombre
-                    } catch (e: Exception) {
-                        "Producto no Encotrado"
-                    },
+                    nombre = venta.nombre,
                     cantidad = venta.cantidad,
                     precio = venta.precio,
-                    descuento = venta.descuento
+                    descuento = venta.descuento,
+                    producto = venta.producto
                 ))
             }
             Log.d("SSSSS", aux.toString())

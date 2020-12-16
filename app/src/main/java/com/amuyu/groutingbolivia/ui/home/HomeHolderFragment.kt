@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import com.amuyu.groutingbolivia.MainViewModel
 import com.amuyu.groutingbolivia.R
+import com.andreseko.SweetAlert.SweetAlertDialog
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_home_holder.view.*
 
@@ -61,6 +62,29 @@ class HomeHolderFragment : Fragment() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        SweetAlertDialog(requireContext(), SweetAlertDialog.NORMAL_TYPE)
+            .also {
+                it.setTitleText("Seleccione un tipo de cliente")
+                .setNeutralButton("Oficina", com.andreseko.SweetAlert.SweetAlertDialog.OnSweetClickListener { _ ->
+                    mViewModel.setClienteType(3)
+                    it.dismissWithAnimation()
+                })
+                it.setCancelButton("Ferretria", com.andreseko.SweetAlert.SweetAlertDialog.OnSweetClickListener { _ ->
+                    mViewModel.setClienteType(1)
+                    it.dismissWithAnimation()
+                })
+                it.setConfirmButton("Obras", com.andreseko.SweetAlert.SweetAlertDialog.OnSweetClickListener { _ ->
+                    mViewModel.setClienteType(2)
+                    it.dismissWithAnimation()
+                })
+                it.setCancelable(false)
+                it.show()
+            }
+
+
+    }
 
     companion object {
         @JvmStatic

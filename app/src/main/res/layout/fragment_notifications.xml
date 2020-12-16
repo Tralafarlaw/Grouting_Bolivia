@@ -1,22 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.notifications.NotificationsFragment">
+    android:orientation="vertical"
+    android:padding="8dp"
+    tools:context=".ui.reportes.NotificationsFragment">
 
     <TextView
-        android:id="@+id/text_notifications"
+        android:id="@+id/textView14"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:text="Reporte de Ventas"
         android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <RadioGroup
+        android:id="@+id/rep_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RadioButton
+            android:id="@+id/rep_hoy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hoy" />
+
+        <RadioButton
+            android:id="@+id/rep_week"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ultima Semana" />
+
+        <RadioButton
+            android:id="@+id/rep_monthy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ultimo Mes" />
+
+        <RadioButton
+            android:id="@+id/rep_custom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Intervalo Personalizado" />
+
+        <TextView
+            android:id="@+id/rep_from"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="Desde:" />
+
+        <TextView
+            android:id="@+id/rep_to"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="Hasta:" />
+
+    </RadioGroup>
+</LinearLayout>

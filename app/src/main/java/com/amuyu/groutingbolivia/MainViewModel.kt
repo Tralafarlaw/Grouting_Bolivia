@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import com.amuyu.groutingbolivia.liveData.ProfileLiveData
 import com.amuyu.groutingbolivia.model.*
 import com.amuyu.movil_inv.repositories.FirestoreRepo
+import java.util.*
+import kotlin.collections.HashMap
 
 class MainViewModel: ViewModel() {
     private val repo = FirestoreRepo()
@@ -23,6 +25,22 @@ class MainViewModel: ViewModel() {
     private val _cartNombres = MutableLiveData<HashMap<String, String>>(hashMapOf())
     private val _cartPrecios = MutableLiveData<HashMap<String, Double>>(hashMapOf())
     private val _cartSize = MutableLiveData<Int>(0)
+    val _clientType = MutableLiveData<TipoVenta>(TipoVenta.FERRETERIA)
+
+    /**
+     * @param n tipo de Cliente
+     * 1 -> Ferreteria
+     * 2 -> Obras
+     * 3 -> Oficina
+     */
+    fun setClienteType(n: Int){
+        _clientType.value = when(n){
+            1 -> TipoVenta.FERRETERIA
+            2 -> TipoVenta.OBRA
+            else -> TipoVenta.OFICINA
+        }
+    }
+    fun getClienteType() = (_clientType.value ?: TipoVenta.OFICINA).i
 
     val _cartProducts = MutableLiveData<HashMap<String, Int>>(hashMapOf())
     val _cartDescuentos = MutableLiveData<HashMap<String, Double>>(hashMapOf())
@@ -33,8 +51,20 @@ class MainViewModel: ViewModel() {
     fun addtoCart(pro: Producto){
         val p = pro.mProductoID
         _cartProducts.value!![p] = (_cartProducts.value!![p]?:0) + 1
-        _cartPrecios.value!![p] = pro.mprecio
-        _cartDescuentos.value!![p] = pro.mdescuento
+        when (_clientType.value?: TipoVenta.OBRA){
+            TipoVenta.FERRETERIA -> {
+                _cartPrecios.value!![p] = pro.precioFerreteria
+                _cartDescuentos.value!![p] = pro.descuentoFerreteria
+            }
+            TipoVenta.OFICINA -> {
+                _cartPrecios.value!![p] = pro.precioOficina
+                _cartDescuentos.value!![p] = pro.descuentoOficina
+            }
+            TipoVenta.OBRA -> {
+                _cartPrecios.value!![p] = pro.precioObras
+                _cartDescuentos.value!![p] = pro.descuentoObras
+            }
+        }
         _cartFotos.value!![p] = pro.photourl
         _cartNombres.value!![p] = pro.nombre
         _cartSize.value=_cartProducts.value!!.size
@@ -70,6 +100,7 @@ class MainViewModel: ViewModel() {
         _cartFotos.value = hashMapOf()
         _cartNombres.value = hashMapOf()
         _cartSize.value=_cartProducts.value!!.size
+        _cartDesc.value=0.0
     }
     fun getCartTotal(): Double{
         var total = 0.0
@@ -106,7 +137,7 @@ class MainViewModel: ViewModel() {
         val list = arrayListOf<ItemVenta>()
         for (data in _cartProducts.value?: hashMapOf()){
             list.add(
-                ItemVenta(data.key, cantidad = data.value, precio = _cartPrecios.value?.get(data.key)!!, descuento = _cartDescuentos.value!![data.key]?:0.0)
+                ItemVenta(data.key, cantidad = data.value, precio = _cartPrecios.value?.get(data.key)!!, descuento = _cartDescuentos.value!![data.key]?:0.0, nombre = _productos.value!!.filter { producto -> producto.mProductoID == data.key }[0].nombre)
             )
         }
         return list
@@ -120,7 +151,8 @@ class MainViewModel: ViewModel() {
             aux.add(ItemVenta(producto = dat.key,
                 cantidad =  dat.value,
                 precio = (precAux[dat.key]?:0.0),
-                descuento = (descAux[dat.key]?:0.0)))
+                descuento = (descAux[dat.key]?:0.0),
+                nombre = _productos.value!!.filter { p -> p.mProductoID == dat.key }[0].nombre),)
         }
         return Venta(numero = num, cliente = cl, items = aux)
     }
@@ -132,4 +164,16 @@ class MainViewModel: ViewModel() {
     val creditos: LiveData<List<Credito>> by lazy { _creditos }
     val ventas: LiveData<List<Venta>> by lazy { _ventas }
     val clientes: LiveData<List<Cliente>> by lazy { _clientes }
+    enum class TipoVenta (val i: Int){
+        FERRETERIA(1),
+        OFICINA(2),
+        OBRA(3)
+    }
+    //////////////////////////////////////////////////////////////////
+    ////////////REPORTES//////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////
+
+    val desde = MutableLiveData<Date>()
+    val hasta = MutableLiveData<Date>()
+
 }

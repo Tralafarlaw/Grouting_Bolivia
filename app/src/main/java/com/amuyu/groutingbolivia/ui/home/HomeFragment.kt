@@ -73,6 +73,7 @@ class HomeFragment : Fragment() {
                 adapter.setdata(its)
             }
         })
+        mViewModel._clientType.observe(viewLifecycleOwner, Observer { _ -> adapter.notifyDataSetChanged() })
 
         return root
     }

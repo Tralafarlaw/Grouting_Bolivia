@@ -94,7 +94,8 @@ class PaymentFragment : Fragment() {
             nombre = cliente,
             dni = dni,
             fecha = Timestamp.now(),
-            asesor = FirebaseAuth.getInstance().uid?:"",
+            asesor = FirebaseAuth.getInstance().currentUser!!.displayName?: "error",
+            asesorId = FirebaseAuth.getInstance().uid?:"error",
             items = mProductos,
             tipo = tipoVenta,
             descuento = descuento,
@@ -113,52 +114,11 @@ class PaymentFragment : Fragment() {
                     asesor = FirebaseAuth.getInstance().uid?:""
                 )
                 FirebaseFirestore.getInstance().collection(Const.Creditos).document(id).set(mCredito).addOnSuccessListener {
-                    for (itemVenta in mVenta.items) {
-                        FirebaseDatabase.getInstance().reference.child("al1").child(itemVenta.producto)
-                            .runTransaction(object : Transaction.Handler {
-                                override fun doTransaction(currentData: MutableData): Transaction.Result {
-                                    val aix = currentData.value ?: 0L
-                                    return Transaction.success(currentData.apply {
-                                        value = (aix as Long) - itemVenta.cantidad
-                                    })
-                                }
-
-                                override fun onComplete(
-                                    error: DatabaseError?,
-                                    committed: Boolean,
-                                    currentData: DataSnapshot?,
-                                ) {
-
-                                }
-
-                            })
-                    }
                     mViewModel.cleanCart()
                     findNavController().navigate(R.id.action_payment_to_confirm)
                     Log.d(TAG, "Credito Sucess")
                 }
             }else{
-                for (itemVenta in mVenta.items) {
-                    FirebaseDatabase.getInstance().reference.child("al1").child(itemVenta.producto)
-                        .runTransaction(object : Transaction.Handler {
-                            override fun doTransaction(currentData: MutableData): Transaction.Result {
-                                val aix = currentData.value ?: 0L
-                                Log.d("TAG", "$aix ´´´´´´ ${itemVenta.cantidad}")
-                                return Transaction.success(currentData.apply {
-                                    value = (aix as Long) - itemVenta.cantidad
-                                })
-                            }
-
-                            override fun onComplete(
-                                error: DatabaseError?,
-                                committed: Boolean,
-                                currentData: DataSnapshot?,
-                            ) {
-                                Log.d("AUD", "wxito")
-                            }
-
-                        })
-                }
                 mViewModel.cleanCart()
                 findNavController().navigate(R.id.action_payment_to_confirm)
             }

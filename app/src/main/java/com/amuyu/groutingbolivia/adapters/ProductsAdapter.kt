@@ -66,7 +66,7 @@ class ProductsAdapter(
         val stocks = vm.inventarios.value?: listOf(hashMapOf(), hashMapOf(), hashMapOf())
         if(vh is ListViewHolder){
             Glide.with(vh.photo.context).load(data.photourl).into(vh.photo)
-            vh.price.text = String.format("Bs: %.2f", data.mprecio)
+            vh.price.text = "" // String.format("Bs: %.2f", data.mprecio)
             vh.stock.text = String.format(
                 "%d unidades en Casa Matriz\n" +
                 "%d unidades en Sopocachi\n" +
@@ -79,7 +79,11 @@ class ProductsAdapter(
 
         }else if (vh is GridViewHolder){
             Glide.with(vh.photo.context).load(data.photourl).into(vh.photo)
-            vh.price.text = String.format("Bs: %.2f",  data.mprecio)
+            vh.price.text = when(vm.getClienteType()){
+                1 -> String.format("Bs: %.2f",  data.precioFerreteria)
+                2 -> String.format("Bs: %.2f",  data.precioOficina)
+                else -> String.format("Bs: %.2f",  data.precioObras)
+            }
             vh.title.text = data.nombre
             vh.root.setOnClickListener {onclick(data, vh.root)}
         }

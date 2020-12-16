@@ -13,7 +13,8 @@ data class Venta(
     val nombre: String? = null,
     val dni: String? = null,
     val fecha: Timestamp = Timestamp.now(),
-    val asesor: String = FirebaseAuth.getInstance().uid?:"userunloged",
+    val asesor: String = FirebaseAuth.getInstance().currentUser?.displayName?:"userunloged",
+    val asesorId: String = FirebaseAuth.getInstance().uid?:"userunloged",
     val items: List<ItemVenta> = listOf(),
     val tipo: Int = 0,
     val descuento: Double = 0.0,
@@ -31,10 +32,11 @@ data class Venta(
 }
 
 data class ItemVenta(
-    val producto: String,
-    val cantidad: Int,
-    val precio: Double,
-    val descuento: Double
+    val producto: String = "",
+    val cantidad: Int = 0,
+    val precio: Double = 0.0,
+    val descuento: Double = 0.0,
+    val nombre: String = ""
 )
 
 enum class TipoVenta(val i: Int){

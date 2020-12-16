@@ -61,7 +61,7 @@ class RegisterClientFragment : DialogFragment() {
                 else -> null
             }
             //checkear valides de los campos
-            if(id!=null) {
+            if(id==null) {
                 FirestoreRepo.registerCliente(Cliente(name, direccion, nit, telefono).apply {
                     zona = tipoD!!
                 })

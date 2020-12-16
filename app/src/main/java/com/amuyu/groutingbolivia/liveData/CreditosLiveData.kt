@@ -29,7 +29,7 @@ class CreditosLiveData(ref: CollectionReference): LiveData<List<Credito>>(),
             for (s in data.documents){
                 mProductoListTemp.add(s.toObject(Credito::class.java)!!.apply { id = s.id })
             }
-            this.value = mProductoListTemp
+            this.value = mProductoListTemp.sortedByDescending { credito -> credito.fecha }
         }else{
             Log.e(TAG, "Error: " + e?.localizedMessage, e)
             e?.printStackTrace()
