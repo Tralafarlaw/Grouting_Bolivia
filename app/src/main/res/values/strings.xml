@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Grouting Bolivia</string>
     <string name="title_home">Ventas</string>
     <string name="title_dashboard">Creditos</string>
@@ -6,4 +6,19 @@
     <string name="title_profile">Perfil</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="mtrl_picker_range_header_unselected" tools:override="true">Desde - Hasta</string>
+
+    <string name="mtrl_picker_range_header_only_start_selected" tools:override="true">%s - Hasta</string>
+
+    <string name="mtrl_picker_range_header_only_end_selected" tools:override="true">Desde - %s</string>
+
+    <string name="mtrl_picker_text_input_date_range_start_hint" tools:override="true">Desde</string>
+
+    <string name="mtrl_picker_text_input_date_range_end_hint" tools:override="true">Hasta</string>
+
+    <string name="mtrl_picker_save" tools:override="true">@string/dialog_ok</string>
+
+    <string name="mtrl_picker_range_header_title" description="Indicates that the user must take the action of picking dates within the calendar to form a range [CHAR_LIMIT=60]">Seleccione un rango de fechas</string>
 </resources>

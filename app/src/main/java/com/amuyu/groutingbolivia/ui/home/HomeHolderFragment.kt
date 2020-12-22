@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TableLayout
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.activityViewModels
@@ -29,7 +30,6 @@ class HomeHolderFragment : Fragment() {
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_home_holder, container, false)
         vp = v.pager
-
         mViewModel.productos.observe(viewLifecycleOwner, Observer {
             val categorias = hashSetOf<String>()
             it.forEach { producto ->
@@ -41,6 +41,8 @@ class HomeHolderFragment : Fragment() {
         })
         vp.adapter = adapter
         tabs = v.tab_layout
+        tabs.tabGravity = TabLayout.GRAVITY_CENTER
+        tabs.tabMode = TabLayout.MODE_SCROLLABLE
         tabs.setupWithViewPager(vp)
         return v
     }

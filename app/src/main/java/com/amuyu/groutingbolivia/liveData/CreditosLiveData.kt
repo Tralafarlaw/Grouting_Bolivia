@@ -3,6 +3,7 @@ package com.amuyu.groutingbolivia.liveData
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.amuyu.groutingbolivia.model.Credito
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 
 private const val TAG = "CreditosLiveData"
@@ -14,7 +15,7 @@ class CreditosLiveData(ref: CollectionReference): LiveData<List<Credito>>(),
     private val mReference = ref
 
     override fun onActive() {
-        mListenerReg = mReference.addSnapshotListener(this)
+        mListenerReg = mReference.whereEqualTo("asesor", FirebaseAuth.getInstance().uid ?:"").addSnapshotListener(this)
         super.onActive()
     }
 

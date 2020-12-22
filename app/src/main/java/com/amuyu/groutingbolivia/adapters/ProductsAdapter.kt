@@ -13,7 +13,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.amuyu.groutingbolivia.MainViewModel
 import com.amuyu.groutingbolivia.R
 import com.amuyu.groutingbolivia.model.Producto
+import com.andreseko.SweetAlert.SweetAlertDialog
 import com.bumptech.glide.Glide
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.item_ventas.view.*
 import kotlinx.android.synthetic.main.item_ventas_list.view.*
 import java.lang.Exception
@@ -84,6 +89,34 @@ class ProductsAdapter(
                 2 -> String.format("Bs: %.2f",  data.precioOficina)
                 else -> String.format("Bs: %.2f",  data.precioObras)
             }
+            vh.root.setOnLongClickListener {
+                SweetAlertDialog(it.context, SweetAlertDialog.NORMAL_TYPE).apply {
+                    titleText = "Stocks"
+                    var st = ""
+                    FirebaseDatabase.getInstance().reference.child("al1/${data.mProductoID}").addListenerForSingleValueEvent(object : ValueEventListener{
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            st += "El Alto: " + snapshot.value.toString()
+                            FirebaseDatabase.getInstance().reference.child("al2/${data.mProductoID}").addListenerForSingleValueEvent(object : ValueEventListener{
+                                override fun onDataChange(snapshot: DataSnapshot) {
+                                    st += "\nSopocachi: " + snapshot.value.toString()
+                                    FirebaseDatabase.getInstance().reference.child("al3/${data.mProductoID}").addListenerForSingleValueEvent(object : ValueEventListener{
+                                        override fun onDataChange(snapshot: DataSnapshot) {
+                                            st += "\nZona Sur: " + snapshot.value.toString()
+                                            contentText = st
+                                        }
+                                        override fun onCancelled(error: DatabaseError) {}
+                                    })
+                                }
+                                override fun onCancelled(error: DatabaseError) {}
+                            })
+                        }
+                        override fun onCancelled(error: DatabaseError) {}
+                    })
+                }.show()
+                true
+            }
+
+
             vh.title.text = data.nombre
             vh.root.setOnClickListener {onclick(data, vh.root)}
         }
@@ -105,7 +138,7 @@ class ProductsAdapter(
 
     override fun getItemViewType(position: Int): Int {
         //Log.d(TAG, "${layoutManager?.spanCount}")
-        return if (layoutManager?.spanCount == 1) ViewType.DETAILED.ordinal
+        return if (layoutManager?.spanCount == 1) ViewType.SMALL.ordinal
         else ViewType.SMALL.ordinal
     }
 }

@@ -28,7 +28,14 @@ data class Venta(
         else -> TipoVenta.OTRO
     }
 ){
-
+    fun getTotal(): Double {
+        var ans  = 0.0
+        for (i in items){
+            ans += ((i.cantidad * i.precio) - i.descuento)
+        }
+        ans -= descuento
+        return ans
+    }
 }
 
 data class ItemVenta(

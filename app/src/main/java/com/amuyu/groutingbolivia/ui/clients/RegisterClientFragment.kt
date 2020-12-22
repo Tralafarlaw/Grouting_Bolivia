@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -48,6 +49,7 @@ class RegisterClientFragment : DialogFragment() {
         })}
 
         root.new_client_agree.setOnClickListener {
+            root.new_client_agree.isEnabled = false
             val name =      root.new_client_name.text.toString()
             val direccion = root.new_client_address.text.toString()
             val nit =       root.new_client_nit.text.toString()
@@ -64,10 +66,13 @@ class RegisterClientFragment : DialogFragment() {
             if(id==null) {
                 FirestoreRepo.registerCliente(Cliente(name, direccion, nit, telefono).apply {
                     zona = tipoD!!
-                })
+                }, this)
             }else{
                 FirestoreRepo.updateCliente(Cliente(name, direccion, nit, telefono).apply {
-                }, id!!)
+                }, id!!).addOnSuccessListener {
+                    Toast.makeText(requireContext(), "Cliente Actualizado con exito", Toast.LENGTH_SHORT).show()
+                    dismiss()
+                }
             }
         }
         return root

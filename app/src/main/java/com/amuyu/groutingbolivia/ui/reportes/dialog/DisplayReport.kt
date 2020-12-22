@@ -89,7 +89,7 @@ class DisplayReport : DialogFragment() {
                     startActivity(intent)
                 }
                 Log.d("PDFF", uri.toString())
-                v.pdfView.fromFile(file)
+                v.pdfView.fromFile(file).show()
             }
         return v
     }

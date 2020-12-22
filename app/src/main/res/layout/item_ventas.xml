@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="105dp"
     android:layout_height="120dp"
+    android:layout_gravity="center"
     android:layout_margin="8dp"
-    android:orientation="vertical"
     android:layout_marginTop="5dp"
-    android:layout_marginBottom="5dp" >
+    android:layout_marginBottom="5dp"
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,7 +20,6 @@
             android:padding="0dp"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toTopOf="@+id/view"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,7 +30,7 @@
             android:background="@color/noName"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
 
         <TextView
@@ -42,12 +41,12 @@
             android:layout_marginTop="2dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="4dp"
+            android:ellipsize="marquee"
+            android:singleLine="true"
             android:text="TextView"
             android:textAlignment="viewStart"
             android:textColor="#FFFFFF"
             android:textSize="12sp"
-            android:ellipsize="marquee"
-            android:singleLine="true"
             app:layout_constraintBottom_toBottomOf="@+id/view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -60,15 +59,54 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="8dp"
+            android:ellipsize="marquee"
+            android:singleLine="true"
             android:text="TextView"
             android:textAlignment="viewStart"
             android:textColor="#FFFFFF"
             android:textSize="12sp"
             android:textStyle="bold"
-            android:ellipsize="marquee"
-            android:singleLine="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/view" />
+
+        <!--TextView
+            android:id="@+id/st1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="2dp"
+            android:text="El Alto: 1000"
+            app:layout_constraintBottom_toTopOf="@+id/st2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/img_grid"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/st2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="2dp"
+            android:text="Sopocachi: 1000"
+            app:layout_constraintBottom_toTopOf="@+id/st3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/img_grid"
+            app:layout_constraintTop_toBottomOf="@+id/st1" />
+
+        <TextView
+            android:id="@+id/st3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="4dp"
+            android:text="Zona Sur : 1000"
+            app:layout_constraintBottom_toTopOf="@+id/txt_title_grid"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/img_grid"
+            app:layout_constraintTop_toBottomOf="@+id/st2" /-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -41,9 +41,18 @@ class NotificationsFragment : Fragment() {
                         picker.dismiss()
                     }
                     picker.addOnPositiveButtonClickListener {
-                        root.rep_from.text = SimpleDateFormat("dd/MM/yyyy").format(Date(it.second!!))
-                        root.rep_to.text = SimpleDateFormat("dd/MM/yyyy").format(Date(it.first!!))
-                        setInterval(Date(it.first!!), Date(it.second!!))
+                        var desde: Long
+                        var hasta: Long
+                        if(it.first!! < it.second!!){
+                            desde = it.first!!
+                            hasta = it.second!!
+                        }else{
+                            desde = it.second!!
+                            hasta = it.first!!
+                        }
+                        root.rep_from.text = "Desde: "+SimpleDateFormat("dd/MM/yyyy").format(Date(desde))
+                        root.rep_to.text = "Hasta: "+SimpleDateFormat("dd/MM/yyyy").format(Date(hasta))
+                        setInterval(Date(desde), Date(hasta))
                     }
                 }
             }

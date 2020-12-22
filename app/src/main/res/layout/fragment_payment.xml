@@ -88,7 +88,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:ems="10"
-        android:hint="Numero de Factura"
+        android:hint="Número de Factura"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/confirm_group"
         app:layout_constraintEnd_toEndOf="parent"

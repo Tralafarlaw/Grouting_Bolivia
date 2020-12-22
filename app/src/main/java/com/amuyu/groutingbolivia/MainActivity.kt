@@ -2,17 +2,16 @@ package com.amuyu.groutingbolivia
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -20,13 +19,24 @@ import androidx.navigation.ui.setupWithNavController
 import com.amuyu.groutingbolivia.customcomponents.FabBottomNavigationView
 import com.amuyu.groutingbolivia.ui.cart.MainCartFragment
 import com.amuyu.groutingbolivia.ui.reportes.dialog.DisplayReport
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
+
 const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
     private var cartSize = 0
     private val mViewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val languageToLoad = "es" // your language
+
+        val locale = Locale(languageToLoad)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.locale = locale
+        baseContext.resources.updateConfiguration(config,
+            baseContext.resources.displayMetrics)
         setContentView(R.layout.activity_main)
         val navView: FabBottomNavigationView = findViewById(R.id.nav_view)
 
@@ -37,7 +47,10 @@ class MainActivity : AppCompatActivity() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications, R.id.navigation_profile))
+            R.id.navigation_home,
+            R.id.navigation_dashboard,
+            R.id.navigation_notifications,
+            R.id.navigation_profile))
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, dest, _ ->
@@ -60,28 +73,29 @@ class MainActivity : AppCompatActivity() {
         }
         main_fab.setOnClickListener {
             when  (navController.currentDestination!!.id) {
-            R.id.navigation_home -> {
-            displayCart()
-        }
-            R.id.navigation_dashboard -> {
-            main_fab.hide()
-        }
-            R.id.navigation_notifications -> {
-            displayPDF()
-        }
-            R.id.navigation_profile -> {
-            main_fab.hide()
-        }
+                R.id.navigation_home -> {
+                    displayCart()
+                }
+                R.id.navigation_dashboard -> {
+                    main_fab.hide()
+                }
+                R.id.navigation_notifications -> {
+                    displayPDF()
+                }
+                R.id.navigation_profile -> {
+                    main_fab.hide()
+                }
         }
         }
     mViewModel.cartSize.observe(this, Observer {
         Log.d(TAG, "$it")
-        cartSize = it?:0
+        cartSize = it ?: 0
     })
     }
 
     override fun onStart() {
         super.onStart()
+        Toast.makeText(this, "Bienvenido ${FirebaseAuth.getInstance().currentUser?.displayName}", Toast.LENGTH_SHORT).show()
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -109,7 +123,9 @@ class MainActivity : AppCompatActivity() {
                 it.show(supportFragmentManager, "Display REport")
             }
         }catch (e: Exception){
-            Toast.makeText(this, "Porfavor seleccione un intervalo de tiempo valido", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,
+                "Porfavor seleccione un intervalo de tiempo valido",
+                Toast.LENGTH_SHORT).show()
         }
     }
 }

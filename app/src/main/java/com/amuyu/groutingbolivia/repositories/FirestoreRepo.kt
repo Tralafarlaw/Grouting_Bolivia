@@ -1,6 +1,8 @@
 package com.amuyu.movil_inv.repositories
 
 import android.util.Log
+import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import com.amuyu.groutingbolivia.liveData.*
 import com.amuyu.groutingbolivia.model.*
 import com.amuyu.movil_inv.liveData.InventariosLiveData
@@ -77,14 +79,7 @@ class FirestoreRepo {
                 e.printStackTrace()
             }
         }
-        fun registerCliente( c: Cliente){
-            val prefix = when (c.zona){
-                ZONAS.ORURO -> "700"
-                ZONAS.CENTRO -> "300"
-                ZONAS.EL_ALTO -> "900"
-                ZONAS.OTROS -> "100"
-                ZONAS.SUR -> "500"
-            }
+        fun registerCliente( c: Cliente, d: DialogFragment) =
             mRealtimeRef.child("clientes").child(c.zona.toString()).runTransaction(object : Transaction.Handler {
                 override fun doTransaction(mutableData: MutableData): Transaction.Result {
                     val p = mutableData.getValue(Int::class.java)?:-1
@@ -100,29 +95,28 @@ class FirestoreRepo {
                     // Transaction completed
                     if(databaseError == null) {
                         val nextid = (currentData?.value as Long?) ?: 0L
-                        val id = prefix + "%04d".format(nextid.toInt())
-                        mReference.collection(Const.Clientes).document(id).set(c)
+                        val id = when (c.zona){
+                            ZONAS.ORURO -> "700"
+                            ZONAS.CENTRO -> "300"
+                            ZONAS.EL_ALTO -> "900"
+                            ZONAS.OTROS -> "100"
+                            ZONAS.SUR -> "500"
+                        } + "%04d".format(nextid.toInt())
+                        mReference.collection(Const.Clientes).document(id).set(c).addOnSuccessListener {
+                            Toast.makeText(d.requireContext(), "Cliente Creado con exito", Toast.LENGTH_SHORT).show()
+                            d.dismiss()
+                        }.addOnFailureListener {
+                            Toast.makeText(d.requireContext(), "Error al crear el cliente", Toast.LENGTH_SHORT).show()
+                            d.dismiss()
+                        }
                     }else {
                         Log.d(TAG, "postTransaction:onComplete:" + databaseError!!)
                     }
                 }
             })
 
-          /*  val postListener = object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val nextid = (dataSnapshot.getValue() as Int?)?:0
-                    val id = prefix+"%04d".format(nextid)
-                    mReference.collection(Const.Clientes).document(id).set(c)
-                }
-                override fun onCancelled(databaseError: DatabaseError) {
-                    Log.w(TAG, "loadId:onCancelled", databaseError.toException())
-                }
-            }
-           // mRealtimeRef.child("clientes").child(c.zona.toString()).addListenerForSingleValueEvent(postListener)*/
-        }
-        fun updateCliente( c: Cliente, id: String){
-            mReference.collection(Const.Clientes).document(id).update(c.toMap() as Map<String, Any>)
-        }
+        fun updateCliente( c: Cliente, id: String) = mReference.collection(Const.Clientes).document(id).update(c.toMap() as Map<String, Any>)
+
         fun completeCredito(id: String, cant: Double){
             mReference.collection(Const.Creditos).document(id).update("saldo", cant)
             mReference.collection(Const.Creditos).document(id).update("historial", FieldValue.arrayUnion(Pagos(cantidad = cant)))

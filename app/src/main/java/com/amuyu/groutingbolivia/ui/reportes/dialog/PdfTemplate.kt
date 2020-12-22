@@ -21,10 +21,10 @@ class PdfTemplate(context: Context) {
     private var document: Document? = null
     private var pdfwriter: PdfWriter? = null
     private var paragraph: Paragraph? = null
-    private val ftittle: Font = Font(Font.FontFamily.TIMES_ROMAN, 20f, Font.BOLD)
-    private val fSubtittle: Font = Font(Font.FontFamily.TIMES_ROMAN, 18f, Font.BOLD)
-    private val fText: Font = Font(Font.FontFamily.TIMES_ROMAN, 12f, Font.BOLD)
-    private val fHightittle: Font = Font(Font.FontFamily.TIMES_ROMAN, 15f, Font.BOLD, BaseColor.RED)
+    private val ftittle: Font = Font(Font.FontFamily.HELVETICA, 20f, Font.BOLD)
+    private val fSubtittle: Font = Font(Font.FontFamily.HELVETICA, 18f, Font.BOLD)
+    private val fText: Font = Font(Font.FontFamily.HELVETICA, 12f, Font.BOLD)
+    private val fHightittle: Font = Font(Font.FontFamily.HELVETICA, 15f, Font.BOLD, BaseColor.RED)
 
     fun openDocument() {
         createPDF()
@@ -89,10 +89,11 @@ class PdfTemplate(context: Context) {
     }
     fun createTable(venta: Venta) {
         try {
-            val columdWidths: FloatArray = floatArrayOf(2.1f, 8.5f, 2f, 2.2f)
+            val columdWidths: FloatArray = floatArrayOf(2.1f, 6.5f, 2f, 2f, 2f)
             paragraph = Paragraph()
             paragraph!!.setFont(fText)
-            paragraph!!.add("Numero: ${venta.numero}\n" +
+            paragraph!!.add("\n" +
+                    "Número: ${venta.numero}\n" +
                     "Clente: ${venta.cliente} [${venta.nombre}]\n" +
                     "Fecha: ${SimpleDateFormat("dd/MM/yyyy hh:mm").format(venta.fecha.toDate())}")
 
@@ -103,13 +104,25 @@ class PdfTemplate(context: Context) {
             pdfPTable.addCell(getCellHeader("Producto"))
             pdfPTable.addCell(getCellHeader("Descuento"))
             pdfPTable.addCell(getCellHeader("Precio Unitario"))
+            pdfPTable.addCell(getCellHeader("Total"))
 
             for (item in venta.items) {
-                pdfPTable.addCell(item.cantidad.toString())
-                pdfPTable.addCell(item.nombre)
-                pdfPTable.addCell("%.2f".format(item.descuento))
-                pdfPTable.addCell("%.2f".format(item.precio))
+                pdfPTable.addCell(Phrase(item.cantidad.toString(), fText))
+                pdfPTable.addCell(Phrase(item.nombre, fText))
+                pdfPTable.addCell(Phrase("%.2f".format(item.descuento), fText))
+                pdfPTable.addCell(Phrase("%.2f".format(item.precio), fText))
+                pdfPTable.addCell(Phrase("%.2f".format((item.precio * item.cantidad) - item.descuento), fText))
             }
+            pdfPTable.addCell("Descuento: ")
+            pdfPTable.addCell("")
+            pdfPTable.addCell("")
+            pdfPTable.addCell("")
+            pdfPTable.addCell("%.2f".format(venta.descuento))
+            pdfPTable.addCell("Total: ")
+            pdfPTable.addCell("")
+            pdfPTable.addCell("")
+            pdfPTable.addCell("")
+            pdfPTable.addCell("%.2f".format(venta.getTotal()))
             paragraph!!.add(pdfPTable)
             document!!.add(paragraph)
 

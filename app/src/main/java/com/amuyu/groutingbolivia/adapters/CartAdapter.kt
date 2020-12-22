@@ -46,17 +46,25 @@ class CartAdapter(vm: MainViewModel, ctx: Context): RecyclerView.Adapter<CartAda
     override fun onBindViewHolder(holder: CartItemHolder, position: Int) {
         val data = mData[position]
         val id = data["id"]!! as String
-        var cantidad = ((data["cantidad"] as Int)?:1)
-        var precio = ((data["precio"] as Double)?:0.0)
-        var descuento =  ((data["descuento"] as Double)?:0.0)
+        var cantidad =  ((data["cantidad"] as Int)?:1)
+        var precio =    ((data["precio"] as Double)?:0.0)
+        var descuento = ((data["descuento"] as Double)?:0.0)
         holder.mNombre.text = (data["nombre"] as String?)?:""
-        holder.mPrecio.text = parseString(cantidad, precio, descuento)
+        val ddata = mViewModel.getCart()[position]
+        holder.mPrecio.text = parseString(
+            ((ddata["cantidad"] as Int)?:1),
+            ((ddata["precio"] as Double)?:0.0),
+            ((ddata["descuento"] as Double)?:0.0))
         holder.mStepper.min = 1
         holder.mStepper.value = cantidad
         holder.mStepper.addActionListener(onValueChanged = {_, i ->
             cantidad = i
             mViewModel.setinCart(id, cantidad)
-            holder.mPrecio.text = parseString(cantidad, precio, descuento)
+            val ddata = mViewModel.getCart()[position]
+            holder.mPrecio.text = parseString(
+                ((ddata["cantidad"] as Int)?:1),
+                ((ddata["precio"] as Double)?:0.0),
+                ((ddata["descuento"] as Double)?:0.0))
         })
         holder.mEliminar.setOnClickListener {
             mViewModel.pullFromCart(data["id"] as String)

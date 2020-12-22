@@ -54,15 +54,15 @@ class MainViewModel: ViewModel() {
         when (_clientType.value?: TipoVenta.OBRA){
             TipoVenta.FERRETERIA -> {
                 _cartPrecios.value!![p] = pro.precioFerreteria
-                _cartDescuentos.value!![p] = pro.descuentoFerreteria
+                _cartDescuentos.value!![p] = ((_cartDescuentos.value!![p]?:0.0) + pro.descuentoFerreteria)
             }
             TipoVenta.OFICINA -> {
                 _cartPrecios.value!![p] = pro.precioOficina
-                _cartDescuentos.value!![p] = pro.descuentoOficina
+                _cartDescuentos.value!![p] =( (_cartDescuentos.value!![p]?:0.0) + pro.descuentoOficina)
             }
             TipoVenta.OBRA -> {
                 _cartPrecios.value!![p] = pro.precioObras
-                _cartDescuentos.value!![p] = pro.descuentoObras
+                _cartDescuentos.value!![p] = ((_cartDescuentos.value!![p]?:0.0) +  pro.descuentoObras)
             }
         }
         _cartFotos.value!![p] = pro.photourl
@@ -79,6 +79,18 @@ class MainViewModel: ViewModel() {
     fun setinCart(p: String, cant: Int){
         _cartProducts.value!![p] = cant
         _cartProducts.postValue(_cartProducts.value)
+        when (_clientType.value?: TipoVenta.OBRA){
+            TipoVenta.FERRETERIA -> {
+                _cartDescuentos.value!![p] = _productos.value!!.filter { producto -> producto.mProductoID == p }[0].descuentoFerreteria * cant
+            }
+            TipoVenta.OFICINA -> {
+                _cartDescuentos.value!![p] = _productos.value!!.filter { producto -> producto.mProductoID == p }[0].descuentoOficina * cant
+            }
+            TipoVenta.OBRA -> {
+                _cartDescuentos.value!![p] = _productos.value!!.filter { producto -> producto.mProductoID == p }[0].descuentoObras * cant
+            }
+        }
+
     }
     fun setDiscount(p: String, cant: Double){
         _cartDescuentos.value!![p] = cant

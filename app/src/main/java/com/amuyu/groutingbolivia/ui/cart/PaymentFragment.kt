@@ -20,6 +20,7 @@ import com.amuyu.groutingbolivia.R
 import com.amuyu.groutingbolivia.model.*
 import com.amuyu.movil_inv.model.Const
 import com.amuyu.movil_inv.repositories.FirestoreRepo
+import com.andreseko.SweetAlert.SweetAlertDialog
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -36,10 +37,6 @@ class PaymentFragment : Fragment() {
         val v =  inflater.inflate(R.layout.fragment_payment, container, false)
         v.confirm_btn.setOnClickListener {
             val ss = v.confirm_fact.text
-            if(ss.isNullOrEmpty()){
-                Toast.makeText(requireContext(), "Porfavor ingrese el numero de factura", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
             val factNum = ss.toString()
             val tipo = when(v.confirm_group.checkedButtonId){
                 R.id.confirm_credito -> TipoVenta.CREDITO.i
@@ -77,6 +74,9 @@ class PaymentFragment : Fragment() {
         return v
     }
     fun commitVenta(descuento: Double = 0.0, firstPay: Double = 0.0, tipoVenta: Int, factura: String, observaciones: String){
+        val loading = SweetAlertDialog(requireContext(), SweetAlertDialog.PROGRESS_TYPE)
+            .setTitleText("Registrando...")
+        loading.show()
         val mProductos = mViewModel.getCartItems()
         var cliente: String? = null
         var clienteId: String? = null
@@ -84,7 +84,15 @@ class PaymentFragment : Fragment() {
         arguments?.let {
             cliente = it.getString("cliente_name", try{(it.getSerializable("cliente") as Cliente?)!!.nombre}catch (e: Exception){ null})
             dni = it.getString("dni", try{(it.getSerializable("cliente") as Cliente?)!!.nit}catch (e: Exception){ null})
-            clienteId = (it.getSerializable("cliente") as Cliente).id
+            clienteId = try {
+                (it.getSerializable("cliente") as Cliente).id
+            } catch (e: Exception){
+                ""
+            }
+        }
+        if(clienteId == "" && tipoVenta == 2){
+            Toast.makeText(requireContext(), "No se puede vender a credito a un cliente no registrado", Toast.LENGTH_LONG).show()
+            return
         }
         val id = FirebaseFirestore.getInstance().collection(Const.RegistrosT).document().id
 
@@ -101,30 +109,48 @@ class PaymentFragment : Fragment() {
             descuento = descuento,
             observaciones = observaciones
         )
+        if (mVenta.items.size != 0){
+            FirebaseFirestore.getInstance().collection(Const.RegistrosT).document(id).set(mVenta)
+                .addOnSuccessListener {
+                    Log.d(TAG, "Venta REgistrada")
+                    mViewModel._VentaSelected.postValue(mVenta)
+                    if (tipoVenta == TipoVenta.CREDITO.i) {
+                        var tp  = firstPay
+                        if(mVenta.getTotal() < firstPay){
+                            Toast.makeText(requireContext(), "El pago inicial no puede ser mayor al total", Toast.LENGTH_LONG).show()
+                            tp = 0.0
+                        }
+                        val mCredito = Credito(
+                            venta = id,
+                            cliente = clienteId ?: "",
+                            total = getTotal(mProductos) - descuento,
+                            saldo = tp,
+                            historial = if (tp == 0.0) arrayListOf(Pagos(
+                                fecha = Timestamp.now(),
+                                cantidad = firstPay
+                            )) else arrayListOf(),
+                            asesor = FirebaseAuth.getInstance().uid ?: ""
+                        )
+                        FirebaseFirestore.getInstance().collection(Const.Creditos).document(id)
+                            .set(mCredito).addOnSuccessListener {
+                            mViewModel.cleanCart()
+                            findNavController().navigate(R.id.action_payment_to_confirm)
+                            Log.d(TAG, "Credito Sucess")
+                        }
+                    } else {
+                        mViewModel.cleanCart()
+                        findNavController().navigate(R.id.action_payment_to_confirm)
+                    }
 
-        FirebaseFirestore.getInstance().collection(Const.RegistrosT).document(id).set(mVenta).addOnSuccessListener {
-            Log.d(TAG, "Venta REgistrada")
-            mViewModel._VentaSelected.postValue(mVenta)
-            if(tipoVenta == TipoVenta.CREDITO.i) {
-                val mCredito = Credito(
-                    venta = id,
-                    cliente = clienteId?:"",
-                    total = getTotal(mProductos)-descuento,
-                    saldo = firstPay,
-                    asesor = FirebaseAuth.getInstance().uid?:""
-                )
-                FirebaseFirestore.getInstance().collection(Const.Creditos).document(id).set(mCredito).addOnSuccessListener {
-                    mViewModel.cleanCart()
-                    findNavController().navigate(R.id.action_payment_to_confirm)
-                    Log.d(TAG, "Credito Sucess")
-                }
-            }else{
-                mViewModel.cleanCart()
-                findNavController().navigate(R.id.action_payment_to_confirm)
+                }.addOnFailureListener {
+                Toast.makeText(requireContext(),
+                    "Error al registrar la venta porfavor intente de nuevo",
+                    Toast.LENGTH_SHORT).show()
+            }.addOnCompleteListener {
+                loading.dismissWithAnimation()
             }
-
-        }.addOnFailureListener {
-            Toast.makeText(requireContext(), "Error al registrar la venta porfavor intente de nuevo", Toast.LENGTH_SHORT).show()
+        }else {
+            Toast.makeText(requireContext(), "Error nop hay ningun producto en la venta porfavor añada almenos un producto al carrito e intente de nuevo", Toast.LENGTH_LONG).show()
         }
 
     }
