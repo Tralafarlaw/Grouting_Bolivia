@@ -1,16 +1,12 @@
 package com.amuyu.groutingbolivia.ui.cart
 
-import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
+import android.graphics.*
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ShareCompat
 import androidx.fragment.app.DialogFragment
@@ -23,15 +19,24 @@ import com.amuyu.groutingbolivia.R
 import com.amuyu.groutingbolivia.adapters.ConfirmAdapter
 import com.amuyu.groutingbolivia.model.ItemVenta
 import com.amuyu.groutingbolivia.model.Venta
+import com.amuyu.groutingbolivia.utils.ImageUtils
 import com.amuyu.groutingbolivia.utils.PDFUtils
-import com.google.common.reflect.Reflection.getPackageName
 import com.google.firebase.auth.FirebaseAuth
+import com.mazenrashed.printooth.Printooth
+import com.mazenrashed.printooth.data.PrintingImagesHelper
+import com.mazenrashed.printooth.data.converter.Converter
+import com.mazenrashed.printooth.data.converter.DefaultConverter
+import com.mazenrashed.printooth.data.printable.ImagePrintable
+import com.mazenrashed.printooth.data.printer.Printer
+import com.mazenrashed.printooth.ui.ScanningActivity
+import com.mazenrashed.printooth.utilities.Printing
 import kotlinx.android.synthetic.main.fragment_confirm.view.*
 import java.text.SimpleDateFormat
 
 
 class ConfirmFragment : Fragment() {
     private val mViewModel: MainViewModel by activityViewModels()
+    private lateinit var printing: Printing
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -86,7 +91,9 @@ class ConfirmFragment : Fragment() {
         v.final_compartir.setOnClickListener {
             val uri = PDFUtils.layoutToPDF(v.final_to_pdf, mData.numero, -1)
            if(uri != null) {
-               requireContext().grantUriPermission(requireContext().packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+               requireContext().grantUriPermission(requireContext().packageName,
+                   uri,
+                   Intent.FLAG_GRANT_READ_URI_PERMISSION);
                val intent = ShareCompat.IntentBuilder.from(requireActivity())
                    .setType("application/pdf")
                    .setStream(uri)
@@ -95,22 +102,62 @@ class ConfirmFragment : Fragment() {
                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                startActivity(intent)
            }else{
-               Toast.makeText(requireContext(), "Ocurrio un error porfavor intente de nuevo", Toast.LENGTH_SHORT).show()
+               Toast.makeText(requireContext(),
+                   "Ocurrio un error porfavor intente de nuevo",
+                   Toast.LENGTH_SHORT).show()
            }
         }
         v.final_imprimir.setOnClickListener {
-            val uri = PDFUtils.layoutToPDF(v.final_to_pdf, mData.numero, 0)
-            if(uri != null ){
-                requireContext().grantUriPermission(requireContext().packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setDataAndType(uri, "application/pdf")
-                intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
-                startActivity(intent)
+            val bmp = PDFUtils.viewToImage(v.final_to_pdf)
+
+
+            if(!Printooth.hasPairedPrinter()){
+                startActivityForResult(Intent(requireContext(), ScanningActivity::class.java),
+                    ScanningActivity.SCANNING_FOR_PRINTER)
             }else{
-                Toast.makeText(requireContext(), "Ocurrio un error porfavor intente de nuevo", Toast.LENGTH_SHORT).show()
+                Printooth.printer(MyPrinter()).print(arrayListOf(ImagePrintable.Builder(tograyScale(
+                    bmp)).build()))
             }
         }
         return v
+    }
+    fun tograyScale(srcImage: Bitmap): Bitmap {
+        val bmpGrayscale = Bitmap.createBitmap(srcImage.getWidth(),
+            srcImage.getHeight(), Bitmap.Config.ARGB_8888)
+
+        val canvas = Canvas(bmpGrayscale)
+        val paint = Paint()
+
+        val cm = ColorMatrix()
+        cm.setSaturation(0f)
+        paint.setColorFilter(ColorMatrixColorFilter(cm))
+        canvas.drawBitmap(srcImage, 0f, 0f, paint)
+        return resize(bmpGrayscale)
+    }
+    fun resize(img: Bitmap, maxWidth: Int = 380, maxHeight: Int = Int.MAX_VALUE): Bitmap {
+        var image = img
+        return if (maxHeight > 0 && maxWidth > 0) {
+            val width = image.width
+            val height = image.height
+            val ratioBitmap = width.toFloat() / height.toFloat()
+            val ratioMax = maxWidth.toFloat() / maxHeight.toFloat()
+            var finalWidth = maxWidth
+            var finalHeight = maxHeight
+            if (ratioMax > ratioBitmap) {
+                finalWidth = (maxHeight.toFloat() * ratioBitmap).toInt()
+            } else {
+                finalHeight = (maxWidth.toFloat() / ratioBitmap).toInt()
+            }
+            image = Bitmap.createScaledBitmap(image, finalWidth, finalHeight, true)
+            image
+        } else {
+            image
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
     }
 
     private fun Venta.getSubTotal (): Double{
@@ -125,4 +172,35 @@ class ConfirmFragment : Fragment() {
         fun newInstance() =
             ConfirmFragment().apply {}
     }
+
+}
+class Pri: PrintingImagesHelper {
+    override fun getBitmapAsByteArray(bitmap: Bitmap): ByteArray {
+        return ImageUtils.decodeBitmap(bitmap)!!
+    }
+}
+
+open class MyPrinter : Printer() {
+    override fun useConverter(): Converter = DefaultConverter()
+
+    override fun initLineSpacingCommand(): ByteArray = byteArrayOf(0x1B, 0x33)
+
+    override fun initInitPrinterCommand(): ByteArray = byteArrayOf(0x1b, 0x40)
+
+    override fun initJustificationCommand(): ByteArray = byteArrayOf(27, 97)
+
+    override fun initFontSizeCommand(): ByteArray = byteArrayOf(29, 33)
+
+    override fun initEmphasizedModeCommand(): ByteArray = byteArrayOf(27, 69) //1 on , 0 off
+
+    override fun initUnderlineModeCommand(): ByteArray = byteArrayOf(27, 45) //1 on , 0 off
+
+    override fun initCharacterCodeCommand(): ByteArray = byteArrayOf(27, 116)
+
+    override fun initFeedLineCommand(): ByteArray = byteArrayOf(27, 100)
+
+    override fun initPrintingImagesHelper(): PrintingImagesHelper = Pri()
+
+
+
 }

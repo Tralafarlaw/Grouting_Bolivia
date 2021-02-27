@@ -61,8 +61,8 @@ class HomeFragment : Fragment() {
         display.getMetrics(outMetrics)
         val density = resources.displayMetrics.density
         val dpWidth = outMetrics.widthPixels / density
-        Log.d(TAG, "$dpWidth, ${(dpWidth/225).toInt()}")
-        val layoutManager = GridLayoutManager(requireContext(),(dpWidth / 225).toInt())
+        Log.d(TAG, "$dpWidth, ${(dpWidth/105).toInt()}")
+        val layoutManager = GridLayoutManager(requireContext(),(dpWidth / 105).toInt())
         adapter = ProductsAdapter(ivm = mViewModel, layoutManager = layoutManager)
         rv.layoutManager = layoutManager
         rv.adapter = adapter

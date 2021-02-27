@@ -14,8 +14,8 @@ android {
         applicationId "com.amuyu.groutingbolivia"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.0.1-dev"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -26,9 +26,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/core.kotlin_module'
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+
     }
     kotlinOptions {
         jvmTarget = '1.8'
@@ -76,4 +80,5 @@ dependencies {
     implementation 'com.github.andreseko:sweet-alert-dialog:1.0.6'
     implementation 'com.itextpdf:itextg:5.5.10'
     implementation "com.pdfview:pdfview-android:1.0.0"
+    implementation 'com.github.mazenrashed:Printooth:1.2.2'
 }

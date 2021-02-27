@@ -91,7 +91,7 @@ class ProductsAdapter(
             }
             vh.root.setOnLongClickListener {
                 SweetAlertDialog(it.context, SweetAlertDialog.NORMAL_TYPE).apply {
-                    titleText = "Stocks"
+                    titleText = "Stocks\n${data.nombre}"
                     var st = ""
                     FirebaseDatabase.getInstance().reference.child("al1/${data.mProductoID}").addListenerForSingleValueEvent(object : ValueEventListener{
                         override fun onDataChange(snapshot: DataSnapshot) {

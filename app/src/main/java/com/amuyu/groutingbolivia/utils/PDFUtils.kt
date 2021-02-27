@@ -21,7 +21,7 @@ import java.io.*
 
 class PDFUtils {
     companion object{
-        private fun viewToImage(view: View): Bitmap {
+        fun viewToImage(view: View): Bitmap {
             val returnedBitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(returnedBitmap)
             val bgDrawable = view.background

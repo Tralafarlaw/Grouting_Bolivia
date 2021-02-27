@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.amuyu.groutingbolivia">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_logo_mini"
@@ -11,6 +14,8 @@
         android:roundIcon="@drawable/ic_logo_mini"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
+        tools:replace="android:theme"
+        android:name=".ApplicationClass"
         android:theme="@style/Theme.GroutingBolivia">
         <activity android:name=".LoginActivity">
             <intent-filter>
