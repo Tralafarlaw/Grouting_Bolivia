@@ -21,7 +21,9 @@ import com.amuyu.groutingbolivia.model.ItemVenta
 import com.amuyu.groutingbolivia.model.Venta
 import com.amuyu.groutingbolivia.utils.ImageUtils
 import com.amuyu.groutingbolivia.utils.PDFUtils
+import com.amuyu.movil_inv.model.Usuario
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.mazenrashed.printooth.Printooth
 import com.mazenrashed.printooth.data.PrintingImagesHelper
 import com.mazenrashed.printooth.data.converter.Converter
@@ -37,6 +39,7 @@ import java.text.SimpleDateFormat
 class ConfirmFragment : Fragment() {
     private val mViewModel: MainViewModel by activityViewModels()
     private lateinit var printing: Printing
+    var db = FirebaseFirestore.getInstance()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -45,16 +48,28 @@ class ConfirmFragment : Fragment() {
         val v = inflater.inflate(R.layout.fragment_confirm, container, false)
         v.final_fecha.text = "Fecha: "+SimpleDateFormat("dd/MM/yyyy").format(mData.fecha.toDate())
         v.final_asesor.text = "Asesor: "+FirebaseAuth.getInstance().currentUser?.displayName
-        v.final_nit.text = "Nro Fact: ${mData.numero}"
+        FirebaseAuth.getInstance().currentUser?.let {
+            db.collection("USUARIOS").document(it.uid).get().addOnSuccessListener { asesor ->
+                if (asesor.exists()){
+                    if (asesor.data?.get("celular")!=null) {
+                        v.final_asesor_cel.text = "Cel: " + asesor.data?.get("celular").toString()
+                    }else{
+                        v.final_asesor_cel.text = "Cel: No disponible"
+                    }
+                }else{
+                    v.final_asesor_cel.text = "Cel: "+"no disponible"
+                }
+            }
+        }
         mViewModel.clientes.observe(viewLifecycleOwner, Observer {
             try {
                 val aux = (it.filter { cliente -> cliente.id == mData.cliente })[0]
                 v.final_cliente.text =
                     "Cliente: ${if (mData.nombre != null) mData.nombre else aux.direccion}"
-                v.final_direccion.text = "Direccion: ${aux.direccion}"
+//                v.final_direccion.text = "Direccion: ${aux.direccion}"
             } catch (e: Exception) {
                 v.final_cliente.text = "Cliente: ${mData.cliente}"
-                v.final_direccion.text = "Direccion: "
+//                v.final_direccion.text = "Direccion: "
             }
         })
         v.final_observaciones.text = "Observaciones:" + mData.observaciones
