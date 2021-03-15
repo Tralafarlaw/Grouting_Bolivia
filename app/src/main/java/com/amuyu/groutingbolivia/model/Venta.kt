@@ -9,6 +9,7 @@ import com.google.firebase.firestore.Exclude
  *  */
 data class Venta(
     val numero: String = "",
+    val numeroCorrelativo: String = "0",
     val cliente: String? = null,
     val nombre: String? = null,
     val dni: String? = null,
@@ -26,7 +27,8 @@ data class Venta(
         1 -> TipoVenta.EFECTIVO
         2 -> TipoVenta.CREDITO
         else -> TipoVenta.OTRO
-    }
+    },
+    val acuenta: Double = 0.0,
 ){
     fun getTotal(): Double {
         var ans  = 0.0
@@ -35,6 +37,11 @@ data class Venta(
         }
         ans -= descuento
         return ans
+    }
+    fun getSaldo(): Double {
+        var tot: Double = getTotal()
+        var acuent: Double = acuenta
+        return tot-acuent
     }
 }
 

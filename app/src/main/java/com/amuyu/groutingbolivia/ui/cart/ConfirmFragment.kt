@@ -72,11 +72,13 @@ class ConfirmFragment : Fragment() {
 //                v.final_direccion.text = "Direccion: "
             }
         })
-        v.final_observaciones.text = "Observaciones:" + mData.observaciones
-        v.final_descuento.text = "Descuento: %.2f".format(mData.descuento)
+        v.final_descuento.text = "%.2f".format(mData.descuento)
         val subtotal = mData.getSubTotal()
-        v.final_subtotal.text = "Subtotal: %.2f".format(subtotal)
-        v.final_total.text = "Total: %.2f".format(subtotal - mData.descuento)
+        v.nro_correlativo.text = "N° "+mData.numeroCorrelativo
+        v.final_subtotal.text = "%.2f".format(subtotal)
+        v.final_total.text = "%.2f".format(subtotal - mData.descuento)
+        v.final_acuenta.text = "%.2f".format(mData.acuenta)
+        v.final_saldo.text = "%.2f".format(mData.getSaldo())
         val rv = v.final_rv
         rv.setHasFixedSize(true)
         rv.layoutManager = LinearLayoutManager(requireContext())

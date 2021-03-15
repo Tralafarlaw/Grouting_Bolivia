@@ -21,7 +21,7 @@ class PdfTemplate(context: Context) {
     private var document: Document? = null
     private var pdfwriter: PdfWriter? = null
     private var paragraph: Paragraph? = null
-    private val ftittle: Font = Font(Font.FontFamily.HELVETICA, 20f, Font.BOLD)
+    private val ftittle: Font = Font(Font.FontFamily.COURIER, 24f, Font.BOLD)
     private val fSubtittle: Font = Font(Font.FontFamily.HELVETICA, 18f, Font.BOLD)
     private val fText: Font = Font(Font.FontFamily.HELVETICA, 12f, Font.BOLD)
     private val fHightittle: Font = Font(Font.FontFamily.HELVETICA, 15f, Font.BOLD, BaseColor.RED)

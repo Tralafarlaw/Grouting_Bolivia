@@ -6,6 +6,8 @@ object Const {
     val Creditos = "CREDITOS"
     const val Clientes = "CLIENTES"
     val Usuarios = "USUARIOS"
+    const val Correlativo = "CORRELATIVO"
+
     const val Inventario = "al1"
 
     const val ORURO     = "oruro"
