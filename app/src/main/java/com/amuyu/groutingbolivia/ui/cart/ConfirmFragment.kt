@@ -106,7 +106,7 @@ class ConfirmFragment : Fragment() {
             }
         }
         v.final_compartir.setOnClickListener {
-            val uri = PDFUtils.layoutToPDF(v.final_to_pdf, mData.numero, -1)
+           val uri = PDFUtils.layoutToPDF(v.final_to_pdf, mData.numeroCorrelativo, -1)
            if(uri != null) {
                requireContext().grantUriPermission(requireContext().packageName,
                    uri,

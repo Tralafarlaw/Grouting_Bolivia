@@ -11,10 +11,7 @@ import android.util.Log
 import android.view.View
 import androidx.core.app.ShareCompat
 import androidx.core.content.FileProvider
-import com.itextpdf.text.Document
-import com.itextpdf.text.Image
-import com.itextpdf.text.Paragraph
-import com.itextpdf.text.Rectangle
+import com.itextpdf.text.*
 import com.itextpdf.text.pdf.PdfWriter
 import java.io.*
 
@@ -61,9 +58,10 @@ class PDFUtils {
                     Image.getInstance(dirpath.absolutePath + File.separator.toString() + "image.jpg")
                 val scaler: Float = (document.getPageSize().getWidth() - document.leftMargin()
                         - document.rightMargin() - 0) / img.getWidth() * 100
-                img.scalePercent(scaler)
-                img.setAlignment(Image.ALIGN_CENTER or Image.ALIGN_TOP)
+                img.scalePercent(20F)
+                img.setAlignment(Image.ALIGN_LEFT or Image.ALIGN_TOP)
                 document.setPageSize(Rectangle(img.absoluteX, img.absoluteY))
+//                document.setPageSize(Rectangle(img.width, img.height))
                 document.add(img)
                 document.close()
                 val aux = File(dirpath.absolutePath + "/$name.pdf")
