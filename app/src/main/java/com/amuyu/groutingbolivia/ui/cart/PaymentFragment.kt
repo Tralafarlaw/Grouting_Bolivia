@@ -125,9 +125,9 @@ class PaymentFragment : Fragment() {
         val id = FirebaseFirestore.getInstance().collection(Const.RegistrosT).document().id
         val idCorrelativo = FirebaseFirestore.getInstance().collection(Const.Correlativo).document("2021").id
         var numAlm1 = 0
-        var gestion = 20
+        var gestion = 21
         val correlativo = FirebaseFirestore.getInstance().collection(Const.Correlativo).document(idCorrelativo)
-        val addOnSuccessListener = correlativo.get().addOnSuccessListener { document ->
+        correlativo.get().addOnSuccessListener { document ->
             if (document.exists()) {
                 numAlm1 = document.data?.get("num_alm1").toString().toInt()
                 gestion = document.data?.get("gestion").toString().toInt()
@@ -137,7 +137,7 @@ class PaymentFragment : Fragment() {
             numAlm1 +=  1
             var acuentaTotal = firstPay
             if (tipoVenta == 1 || tipoVenta == 3){
-                acuentaTotal = getTotal(mProductos)
+                acuentaTotal = getTotal(mProductos) - descuento
             }
             val mVenta = Venta(
                 numero = factura,
