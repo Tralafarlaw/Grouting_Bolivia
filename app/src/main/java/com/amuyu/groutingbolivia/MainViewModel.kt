@@ -22,7 +22,7 @@ class MainViewModel: ViewModel() {
     private val _clientes by lazy { repo.getClientes() }
 
     private val _cartFotos = MutableLiveData<HashMap<String, String>>(hashMapOf())
-    private val _cartNombres = MutableLiveData<HashMap<String, String>>(hashMapOf())
+    val _cartNombres = MutableLiveData<HashMap<String, String>>(hashMapOf())
     private val _cartPrecios = MutableLiveData<HashMap<String, Double>>(hashMapOf())
     private val _cartSize = MutableLiveData<Int>(0)
     val _clientType = MutableLiveData<TipoVenta>(TipoVenta.FERRETERIA)
