@@ -113,11 +113,20 @@ class PdfTemplate(context: Context) {
                 pdfPTable.addCell(Phrase("%.2f".format(item.precio), fText))
                 pdfPTable.addCell(Phrase("%.2f".format((item.precio * item.cantidad) - item.descuento), fText))
             }
-            pdfPTable.addCell("Descuento: ")
-            pdfPTable.addCell("")
-            pdfPTable.addCell("")
-            pdfPTable.addCell("")
-            pdfPTable.addCell("%.2f".format(venta.descuento))
+            if (venta.acuenta < venta.getTotal()) {
+                pdfPTable.addCell("A cuenta: ") 
+                pdfPTable.addCell("")
+                pdfPTable.addCell("")
+                pdfPTable.addCell("")
+                pdfPTable.addCell("%.2f".format(venta.acuenta)) 
+                
+                pdfPTable.addCell("Saldo: ") 
+                pdfPTable.addCell("")
+                pdfPTable.addCell("")
+                pdfPTable.addCell("")
+                pdfPTable.addCell("%.2f".format(venta.getTotal() - venta.acuenta))
+                
+            }
             pdfPTable.addCell("Total: ")
             pdfPTable.addCell("")
             pdfPTable.addCell("")
