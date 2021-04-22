@@ -57,11 +57,17 @@ class PaymentFragment : Fragment() {
                     .setPositiveButton("Aceptar",
                         DialogInterface.OnClickListener { dialogInterface, i ->
                             if (!input.text.isNullOrEmpty()) {
-                                commitVenta(firstPay = input.text.toString().toDouble(),
-                                    descuento = desc,
-                                    tipoVenta = tipo,
-                                    factura = factNum,
-                                    observaciones = obs)
+                                if (getTotal(mViewModel.getCartItems()) < input.text.toString().toDouble()) {
+                                    Toast.makeText(requireContext(),
+                                        "El pago inicial no puede ser mayor al TOTAL",
+                                        Toast.LENGTH_LONG).show()
+                                } else {
+                                    commitVenta(firstPay = input.text.toString().toDouble(),
+                                        descuento = desc,
+                                        tipoVenta = tipo,
+                                        factura = factNum,
+                                        observaciones = obs)
+                                }
                             } else {
                                 commitVenta(desc,
                                     tipoVenta = tipo,
@@ -184,7 +190,7 @@ class PaymentFragment : Fragment() {
                                 saldo = tp,
                                 historial = if (tp == 0.0) arrayListOf(Pagos(
                                     fecha = Timestamp.now(),
-                                    cantidad = firstPay
+                                    cantidad = tp
                                 )) else arrayListOf(),
                                 asesor = FirebaseAuth.getInstance().uid ?: ""
                             )
