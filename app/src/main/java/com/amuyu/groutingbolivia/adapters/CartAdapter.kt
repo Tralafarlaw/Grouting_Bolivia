@@ -2,6 +2,7 @@ package com.amuyu.groutingbolivia.adapters
 
 import android.app.AlertDialog
 import android.content.Context
+import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.input.input
 import com.amuyu.groutingbolivia.MainViewModel
 import com.amuyu.groutingbolivia.R
 import com.bumptech.glide.Glide
@@ -112,6 +115,21 @@ class CartAdapter(vm: MainViewModel, ctx: Context): RecyclerView.Adapter<CartAda
             v.descuento_cancel.setOnClickListener {
                 dial.dismiss()
             }
+        }
+        holder.itemView.setOnLongClickListener {
+            MaterialDialog(it.context).show{
+                input(hint = "Cantidad", inputType = InputType.TYPE_CLASS_NUMBER, allowEmpty = false) { _, sequence ->
+                    val num = sequence.toString().toInt()
+                    cantidad = num
+                    mViewModel.setinCart(id, cantidad)
+                    holder.mPrecio.text = parseString(
+                        ((ddata["cantidad"] as Int)?:1),
+                        ((ddata["precio"] as Double)?:0.0),
+                        ((ddata["descuento"] as Double)?:0.0))
+                    holder.mStepper.value = num
+                }
+            }
+            true
         }
         Glide.with(holder.mPhoto).load(data["url"] as String).into(holder.mPhoto)
     }
