@@ -9,12 +9,14 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
+import com.afollestad.materialdialogs.list.listItems
 import com.amuyu.groutingbolivia.R
 import com.amuyu.groutingbolivia.model.Cliente
 import com.amuyu.groutingbolivia.model.Credito
 import com.amuyu.movil_inv.repositories.FirestoreRepo
 import com.andreseko.SweetAlert.SweetAlertDialog
 import kotlinx.android.synthetic.main.item_credito.view.*
+import java.text.SimpleDateFormat
 
 
 class CreditosAdapter: RecyclerView.Adapter<CreditosAdapter.CreditosVH>() {
@@ -53,6 +55,17 @@ class CreditosAdapter: RecyclerView.Adapter<CreditosAdapter.CreditosVH>() {
         holder.nombre.setText(getname(aux.cliente))
         holder.fecha.setText(DateFormat.format("dd/MM/yyyy", aux.fecha.toDate()))
         holder.pendiente.setText("Bs. %.2f/%.2f".format(aux.saldo, aux.total))
+        holder.itemView.setOnLongClickListener {
+            val  df = SimpleDateFormat("dd/MM/yyyy")
+            val data = aux.historial.map { p ->
+                "${df.format(p.fecha.toDate())}\nBs. ${"%.2f".format(p.cantidad)}"
+            }
+            MaterialDialog(it.context).show {
+                title(text = "Historial de pagos")
+                listItems(items = data)
+            }
+            true
+        }
         holder.itemView.setOnClickListener {
             if(aux.saldo < aux.total) {
                 MaterialDialog(it.context).show {
